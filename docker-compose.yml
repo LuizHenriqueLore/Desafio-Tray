@@ -1,0 +1,57 @@
+version: '3'
+
+services:
+    postgres:
+        image: postgres:latest
+        container_name: postgres
+        expose:
+            - "5432"
+        ports:
+            - "5432:5432"
+        volumes:
+            - "/var/backup"
+            - "/var/lib/postgresql/data"
+        environment:
+            - POSTGRES_PASSWORD=trayrules
+        networks:
+            - backend
+
+    php:
+        build:
+            context: '.'
+            args:
+                uid: ${UID}
+        container_name: php
+        volumes:
+            - .:/var/www/html
+        environment:
+            - APACHE_RUN_USER=#${UID}
+            - APACHE_RUN_GROUP=#${UID}
+        ports:
+            - "8000:80"
+        networks:
+            - backend
+        depends_on:
+            - postgres
+            - migration
+    
+    migration:
+        build:
+            context: '.'
+            args:
+                uid: ${UID}
+        container_name: migrations
+        command: php artisan migrate:refresh
+        volumes:
+            - .:/var/www/html
+        environment:
+            - APACHE_RUN_USER=#${UID}
+            - APACHE_RUN_GROUP=#${UID}
+        networks:
+            - backend
+        depends_on:
+            - postgres
+
+networks:
+    backend:
+        driver: bridge
