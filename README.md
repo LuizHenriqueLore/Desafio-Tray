@@ -2,11 +2,13 @@
 
 1. Clone o Projeto
 
-2. Rode "composer install"
+2. Entre na pasta do Projeto
 
-3. Rode "docker-compose up -d"
+3. Rode "composer install"
 
-4. Acesse localhost:8000
+4. Rode "docker-compose up -d"
+
+5. Acesse localhost:8000
 
 ## Considerações Finais
 
