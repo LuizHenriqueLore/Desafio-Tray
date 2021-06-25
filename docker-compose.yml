@@ -41,7 +41,7 @@ services:
             args:
                 uid: ${UID}
         container_name: migrations
-        command: php artisan migrate:refresh
+        command: php artisan migrate:refresh --seed
         volumes:
             - .:/var/www/html
         environment:
